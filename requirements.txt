@@ -1,0 +1,7 @@
+# Dépendances de base pour le bot
+discord.py==2.3.2  # Version stable connue
+python-dotenv==1.0.1  # Pour lire les variables (utile pour le test)
+aiohttp==3.9.5 # Pour faire des requêtes asynchrones vers n8n
+
+# Dépendance pour PostgreSQL (pour l'intégration que nous voulons)
+psycopg2-binary
