@@ -1,18 +1,20 @@
-# Utilise une image de base Python légère
-FROM python:3.11-slim
+# Utilise une image de base Node.js LTS (Long Term Support)
+FROM node:20-slim
 
 # Définit le répertoire de travail dans le conteneur
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copie le fichier de dépendances et les installe
-# Note : Nous copions également le driver PostgreSQL nécessaire
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copie le package.json et le package-lock.json pour installer les dépendances
+# Ceci permet à Docker de mettre en cache les dépendances, accélérant les constructions
+COPY package*.json ./
 
-# Copie le reste du code de l'application (votre main.py ou le script principal)
-# Le code du dépôt est dans 'src/bot.py'
-COPY . /app
+# Installe les dépendances
+# Note : L'installation de discord.js doit se faire après le copy.
+RUN npm install
 
-# Commande pour démarrer l'application (lance le script principal du bot)
-# Basé sur la structure du dépôt d'origine
-CMD ["python", "src/bot.py"]
+# Copie le reste du code de l'application (l'index.js)
+COPY . .
+
+# Commande pour démarrer l'application (le bot)
+# Le fichier principal est index.js selon le guide
+CMD [ "node", "index.js" ]
